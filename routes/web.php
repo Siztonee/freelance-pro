@@ -1,25 +1,42 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Profile\AddPortfolio;
+use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\Profile\SettingsController;
 use App\Http\Controllers\SearchController;
+use App\Livewire\Freelancers;
 use App\Livewire\Home;
+use App\Livewire\Profile\PortfolioInfo;
+use App\Livewire\Profile\Portfolios;
 use App\Livewire\Profile\Profile;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', Home::class)->name('home');
 
 
-    //profile
 Route::middleware('auth')->group(function () {
+
+    //    profile
     Route::get('/user/{uuid}', Profile::class)->name('user.profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::patch('/profile/edit', [ProfileController::class, 'update'])->name('user.profile.update');
-});
+    Route::get('/profile/settings', SettingsController::class)->name('user.profile.settings');
+
+    //    portfolio
+    Route::get('/profile/{uuid}/portfolios', Portfolios::class)->name('user.portfolio.list');
+    Route::get('/profile/{uuid}/portfolio/{id}', PortfolioInfo::class)->name('user.portfolio.info');
+    Route::get('/profile/add-portfolio', [AddPortfolio::class, 'index'])->name('user.portfolio.add');
+    Route::post('/profile/add-portfolio', [AddPortfolio::class, 'add'])->name('user.portfolio.post');
+
+//    freelancers
+    Route::get('/freelancers', Freelancers::class)->name('freelancers');
 
     //search
 Route::post('/search-spec', [SearchController::class, 'searchSpec'])->name('search.spec');
 Route::post('/search-skill', [SearchController::class, 'searchSkill'])->name('search.skill');
+Route::post('/search-freelancer', [SearchController::class, 'searchFreelancer'])->name('search.freelancer');
 
+});
 
 //Route::get('/dashboard', function () {
 //    return view('dashboard');

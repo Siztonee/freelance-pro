@@ -18,5 +18,6 @@
 
         @include('layouts.footer')
 
+
     </body>
 </html>

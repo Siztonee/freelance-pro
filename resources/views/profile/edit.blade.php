@@ -56,19 +56,23 @@
                         <textarea id="about" name="description" rows="4" class="w-full border border-gray-300 p-2 rounded-lg">{{ $user->description }}</textarea>
                     </div>
 
-                    <div class="mt-6">
-                        <label class="block text-gray-700 font-semibold mb-2">Навыки</label>
-                        <div id="selectedSkills" class="flex flex-wrap cursor-pointer">
-                            @forelse($skills as $skill)
-                                <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold mr-2 mb-2 skill-tag" data-skill-name="{{ $skill }}">{{ $skill }}</span>
-                            @empty
-                                <span>Нет навыков</span>
-                            @endforelse
+                    @if($user->type == 'seller')
+                        <div class="mt-6">
+                            <label class="block text-gray-700 font-semibold mb-2">Навыки</label>
+                            <div id="selectedSkills" class="flex flex-wrap cursor-pointer">
+                                    @if ($skills != '' && !empty($skills))
+                                        @foreach($skills as $skill)
+                                            <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold mr-2 mb-2 skill-tag" data-skill-name="{{ $skill }}">{{ $skill }}</span>
+                                        @endforeach
+                                    @else
+                                        <span>Не указано</span>
+                                    @endif
+                            </div>
+                            <input type="hidden" id="selectedSkillsInput" name="skills" value="{{ implode(',', $skills) }}">
+                            <input type="text" id="new_skill" name="new_skill" placeholder="Добавить новый навык" class="w-full border border-gray-300 p-2 rounded-lg mt-2" data-url="{{ route('search.skill') }}">
+                            <div id="skillResults" class="hidden mt-2 cursor-pointer"></div>
                         </div>
-                        <input type="hidden" id="selectedSkillsInput" name="skills" value="{{ implode(',', $skills) }}">
-                        <input type="text" id="new_skill" name="new_skill" placeholder="Добавить новый навык" class="w-full border border-gray-300 p-2 rounded-lg mt-2" data-url="{{ route('search.skill') }}">
-                        <div id="skillResults" class="hidden mt-2 cursor-pointer"></div>
-                    </div>
+                    @endif
 
                     <div class="mt-6">
                         <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">Сохранить изменения</button>

@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('specialization')->nullable();
             $table->string('location')->nullable();
             $table->integer('reviews_count')->default(0);
+            $table->enum('type', ['seller', 'buyer']);
+            $table->boolean('is_activated')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

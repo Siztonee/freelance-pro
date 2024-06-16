@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('portfolios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->text('content');
+            $table->string('name');
+            $table->text('description');
+            $table->string('category');
+            $table->string('skills');
+            $table->text('media');
             $table->timestamps();
         });
     }

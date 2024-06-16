@@ -30,6 +30,8 @@ class User extends Authenticatable
         'specialization',
         'location',
         'reviews_count',
+        'type',
+        'is_activated'
     ];
 
     /**

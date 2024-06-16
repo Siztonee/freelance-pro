@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Profile;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -9,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use function auth;
+use function view;
 
 class ProfileController extends Controller
 {
@@ -38,6 +41,8 @@ class ProfileController extends Controller
         if ($request->profile_image && $request->profile_image != auth()->user()->profile_image) {
             $data['profile_image'] = $request->file('profile_image')->store('public/profiles');
         }
+
+        $data['is_activated'] = 1;
 
         $user->update($data);
 

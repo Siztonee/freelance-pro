@@ -12,7 +12,11 @@ class Portfolio extends Model
 
     protected $fillable = [
         'user_id',
-        'content',
+        'name',
+        'description',
+        'category',
+        'skills',
+        'media',
     ];
 
     public function user(): BelongsTo
