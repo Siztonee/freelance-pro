@@ -6,6 +6,7 @@ use App\Models\Skill;
 use App\Models\Specialization;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
@@ -32,4 +33,5 @@ class SearchController extends Controller
 
         return response()->json(['skills' => $skills]);
     }
+
 }

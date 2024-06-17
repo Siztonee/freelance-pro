@@ -2,7 +2,7 @@
     <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
         <div class="text-2xl font-bold text-indigo-600">FreelancePro</div>
         <div class="flex items-center">
-            <a href="#" class="text-gray-600 hover:text-indigo-600 mx-4">Найти проект</a>
+            <a href="{{ route('projects') }}" class="text-gray-600 hover:text-indigo-600 mx-4">Найти проект</a>
             <a href="{{ route('freelancers') }}" class="text-gray-600 hover:text-indigo-600 mx-4">Найти фрилансера</a>
             @if(auth()->user())
                 <a href="{{ route('user.profile', auth()->user()->uuid) }}" class="hover:text-indigo-600 px-4 py-2">{{ auth()->user()->username }}</a>

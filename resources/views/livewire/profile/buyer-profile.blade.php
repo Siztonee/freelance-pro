@@ -1,13 +1,8 @@
 <div class="bg-gray-100">
-    <header class="bg-white shadow-md">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <div class="flex items-center">
-                <a href="#" class="text-gray-600 hover:text-indigo-600 mx-4">Мои проекты</a>
-                <a href="#" class="text-gray-600 hover:text-indigo-600 mx-4">Сообщения</a>
-                <a href="{{ route('user.profile.settings') }}" class="text-gray-600 hover:text-indigo-600 mx-4">Настройки</a>
-            </div>
-        </nav>
-    </header>
+
+    @if($user->id == auth()->user()->id)
+        @include('layouts.profile-header')
+    @endif
 
     <main class="container mx-auto px-6 py-8">
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
