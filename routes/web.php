@@ -1,17 +1,22 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CreateProjectController;
+use App\Http\Controllers\CreateServiceController;
 use App\Http\Controllers\Profile\AddPortfolio;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Profile\SettingsController;
 use App\Http\Controllers\SearchController;
-use App\Livewire\Freelancers;
 use App\Livewire\Home;
 use App\Livewire\Profile\PortfolioInfo;
 use App\Livewire\Profile\Portfolios;
 use App\Livewire\Profile\Profile;
 use App\Livewire\Project\MyProjects;
+use App\Livewire\Project\ProjectInfo;
 use App\Livewire\Project\Projects;
+use App\Livewire\Service\ServiceInfo;
+use App\Livewire\Service\Services;
+use App\Livewire\Service\MyServices;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', Home::class)->name('home');
@@ -31,14 +36,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/add-portfolio', [AddPortfolio::class, 'index'])->name('user.portfolio.add');
     Route::post('/profile/add-portfolio', [AddPortfolio::class, 'add'])->name('user.portfolio.post');
 
-    //    freelancers
-    Route::get('/freelancers', Freelancers::class)->name('freelancers');
+    //    services
+    Route::get('/services', Services::class)->name('services');
+    Route::get('/my-services', MyServices::class)->name('user.services');
+    Route::get('/my-services/create', [CreateServiceController::class, 'index'])->name('user.services.create');
+    Route::post('/my-services/create', [CreateServiceController::class, 'store'])->name('user.services.store');
+
 
     //    projects
     Route::get('/projects', Projects::class)->name('projects');
     Route::get('/my-projects', MyProjects::class)->name('user.projects');
     Route::get('/my-projects/create', [CreateProjectController::class, 'index'])->name('user.projects.create');
     Route::post('/my-projects/create', [CreateProjectController::class, 'store'])->name('user.projects.store');
+
+
+    //    chat
+    Route::get('/chat', [ChatController::class, 'index'])->name('user.chat');
 
 
     //search

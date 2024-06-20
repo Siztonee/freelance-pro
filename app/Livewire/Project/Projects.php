@@ -3,20 +3,26 @@
 namespace App\Livewire\Project;
 
 use App\Models\Category;
-use App\Models\Project;
-use Illuminate\Http\Request;
+use App\Models\Skill;
+use App\Services\ProjectService;
 use Livewire\Component;
 use function view;
 
 class Projects extends Component
 {
-    public array $projects = [];
-    public array $categories = [];
-    public $pay = '';
+    public array $projects;
+    public array $categories;
+    public string $pay = '';
+    public string $category = '';
+    public array $selectedSkills = [];
+    public array $skills;
 
-    protected $queryString = [
-        'pay' => ['except' => '']
-    ];
+    protected ProjectService $projectService;
+
+    public function __construct()
+    {
+        $this->projectService = app(ProjectService::class);
+    }
 
     public function mount()
     {
@@ -29,40 +35,49 @@ class Projects extends Component
         $this->loadProjects();
     }
 
+    public function updatedCategory()
+    {
+        $this->loadProjects();
+    }
+
+    public function loadSkills()
+    {
+        $category = Category::where('id', $this->category)->first();
+        $this->skills = Skill::where('category_id', $category->id)->pluck('name')->toArray();
+    }
+
+    public function searchBySkills($skill)
+    {
+        if (in_array($skill, $this->selectedSkills)) {
+            $this->selectedSkills = array_diff($this->selectedSkills, [$skill]);
+        } else {
+            $this->selectedSkills[] = $skill;
+        }
+
+        $this->loadProjects();
+    }
+
+    public function deleteSkill($skill)
+    {
+        $this->selectedSkills = array_diff($this->selectedSkills, [$skill]);
+        $this->loadProjects();
+    }
+
     public function loadCategories()
     {
-        // Загружаем категории в массив
         $this->categories = Category::pluck('name', 'id')->toArray();
     }
 
-    public function loadProjects()
+    public function loadProjects($skill = null)
     {
-        // Создаем базовый запрос
-        $query = Project::where('is_banned', 0)
-            ->join('users', 'projects.user_id', '=', 'users.id')
-            ->orderByDesc('users.rating')
-            ->select('projects.*')
-            ->with('user');
-
-        // Применяем фильтр по оплате
-        if ($this->pay) {
-            if ($this->pay === '10000+') {
-                $query->where('projects.pay', '>', 10000);
-            } else {
-                list($min, $max) = explode('-', $this->pay);
-                $query->whereBetween('projects.pay', [(int)$min, (int)$max]);
-            }
+        $this->projects = $this->projectService->loadProjects($this->pay, $this->category, $this->selectedSkills);
+        if (!empty($this->category)) {
+            $this->loadSkills();
         }
 
-        $projects = $query->get();
 
-        // Преобразуем коллекцию проектов в массив и добавляем имя категории
-        $this->projects = $projects->map(function ($project) {
-            $projectArray = $project->toArray();
-            $projectArray['category_name'] = $this->categories[$projectArray['category_id']] ?? 'Unknown';
-            return $projectArray;
-        })->all();
     }
+
 
 
     public function render()

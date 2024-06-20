@@ -15,13 +15,13 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-md p-6">
-            <form>
                 <div class="mb-4">
                     <label for="category" class="block text-gray-700 font-semibold mb-2">Категория</label>
-                    <select id="category" name="category" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="web">Веб-разработка</option>
-                        <option value="design">Дизайн</option>
-                        <option value="writing">Копирайтинг</option>
+                    <select id="category" wire:model.lazy="category" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Все</option>
+                        @foreach($categories as $id => $name)
+                            <option value="{{ $id }}">{{ $name }}</option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -29,31 +29,58 @@
                     <label class="block text-gray-700 font-semibold mb-2">Статус</label>
                     <div class="flex space-x-4">
                         <div class="flex items-center">
-                            <input type="radio" id="status-active" name="status" value="active" class="form-radio h-4 w-4 text-blue-600">
-                            <label for="status-active" class="ml-2 text-gray-700">Ожидается</label>
+                            <input type="radio" id="status-active" name="status" wire:model.lazy="status" value="active" class="form-radio h-4 w-4 text-blue-600">
+                            <label for="status-active" class="ml-2 text-gray-700">Активен</label>
                         </div>
                         <div class="flex items-center">
-                            <input type="radio" id="status-completed" name="status" value="completed" class="form-radio h-4 w-4 text-blue-600">
+                            <input type="radio" id="status-pending" name="status" wire:model.lazy="status" value="pending" class="form-radio h-4 w-4 text-blue-600">
+                            <label for="status-pending" class="ml-2 text-gray-700">Ожидается</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="status-completed" name="status" wire:model.lazy="status" value="completed" class="form-radio h-4 w-4 text-blue-600">
                             <label for="status-completed" class="ml-2 text-gray-700">Закончен</label>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">Найти проекты</button>
-            </form>
         </div>
 
-        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="mt-12 w-full space-y-6">
+
             <!-- Пример карточки проекта -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">Разработка лендинга</h3>
-                <p class="text-gray-600 mb-4">Требуется разработать одностраничный сайт для нового продукта.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-500">Бюджет: 20000 ₽</span>
-                    <a href="#" class="text-blue-500 hover:text-blue-600">Подробнее</a>
+            @forelse($projects as $project)
+                @php
+                    $category = \App\Models\Category::find($project['category_id']);
+                @endphp
+                <div class="rounded-lg shadow-md p-6 flex flex-col justify-between
+                            bg-white
+                            ">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2 break-words">{{ $project['name'] }}</h3>
+                        <p class="text-gray-600 mb-4 break-words">{{ Str::limit($project['description'], 60, '...') }}</p>
+
+                        <!-- Категория теперь с отступом внизу 4px -->
+                        <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold mb-1">
+                            {{ $category->name ?? 'Без категории' }}
+                        </span>
+                    </div>
+
+                    <!-- Блок с Бюджетом и Подробнее -->
+                    <div class="mt-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Оплата: {{ $project['pay'] ? $project['pay'].' сом' : 'Договорная' }}</span>
+                            <div>
+                                @foreach(explode(',', $project['requirement_skills']) as $skill)
+                                    <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-semibold">{{ $skill }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            @empty
+            @endforelse
             <!-- Повторите этот блок для других проектов -->
+
         </div>
     </main>
 </div>

@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
             $table->string('name');
             $table->text('description');
-            $table->unsignedBigInteger('category_id');
+            $table->foreignId('category_id');
             $table->unsignedBigInteger('pay')->nullable();
             $table->boolean('is_negotiable')->default(0);
             $table->integer('deadline');
-            $table->text('requirement_skills');
+            $table->text('skills');
             $table->boolean('is_banned')->default(0);
             $table->enum('status', ['active', 'pending', 'completed'])->default('active');
             $table->timestamps();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('services');
     }
 };

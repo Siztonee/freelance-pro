@@ -1,2 +1,2 @@
-This is HeadHunters website clone.
+Freelance Platform with PHP framework Laravel.
 

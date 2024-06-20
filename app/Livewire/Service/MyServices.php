@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Livewire\Project;
+namespace App\Livewire\Service;
 
 use App\Models\Category;
 use App\Models\Project;
+use App\Models\Service;
 use Livewire\Component;
 use function view;
 
-class MyProjects extends Component
+class MyServices extends Component
 {
-    public array $projects = [];
+    public array $services = [];
     public string $category = '';
-    public string $status = 'active'; // Новое свойство для статуса
+    public string $status = 'active';
     public array $categories = [];
 
     public function mount()
@@ -22,7 +23,7 @@ class MyProjects extends Component
 
     public function load()
     {
-        $query = Project::where('user_id', auth()->user()->id)
+        $query = Service::where('user_id', auth()->user()->id)
             ->where('is_banned', 0);
 
         if ($this->category) {
@@ -37,7 +38,7 @@ class MyProjects extends Component
             $query->where('status', 'completed');
         }
 
-        $this->projects = $query->latest()->get()->toArray();
+        $this->services = $query->latest()->get()->toArray();
     }
 
     public function updated($propertyName)
@@ -47,6 +48,6 @@ class MyProjects extends Component
 
     public function render()
     {
-        return view('livewire.project.my-projects')->extends('layouts.app');
+        return view('livewire.service.my-services')->extends('layouts.app');
     }
 }
