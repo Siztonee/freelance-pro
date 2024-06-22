@@ -74,8 +74,11 @@ class Projects extends Component
         if (!empty($this->category)) {
             $this->loadSkills();
         }
+    }
 
-
+    public function respond()
+    {
+        return redirect()->route('user.chat', ['receiver_id' => $this->project['user_id']]);
     }
 
 

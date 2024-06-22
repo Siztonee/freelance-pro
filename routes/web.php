@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
 
 
     //    chat
-    Route::get('/chat', [ChatController::class, 'index'])->name('user.chat');
+    Route::get('/chat/{receiver_id?}', [ChatController::class, 'index'])->name('user.chat');
 
 
     //search

@@ -23,10 +23,14 @@ class ChatComponent extends Component
     public array $messages;
     public bool $is_opened = false;
 
-    public function mount($users)
+    public function mount($users, $receiver_id = null)
     {
         $this->users = $users;
         $this->sender_id = auth()->user()->id;
+
+        if ($receiver_id !== null) {
+            $this->selectChat($receiver_id);
+        }
     }
 
     public function selectChat($receiver_id)
@@ -42,6 +46,11 @@ class ChatComponent extends Component
         $this->loadMessages();
     }
 
+    public function scrollToBottom()
+    {
+        $this->dispatch('scrollToBottom');
+    }
+
     public function loadMessages()
     {
         $this->messages = Message::where(function ($query) {
@@ -54,6 +63,8 @@ class ChatComponent extends Component
         ->with('uploads')
         ->get()
         ->toArray();
+
+        $this->scrollToBottom();
     }
 
     public function sendMessage()
@@ -97,6 +108,7 @@ class ChatComponent extends Component
         unset($this->message, $this->files);
 
         $this->loadMessages();
+        $this->scrollToBottom();
     }
 
 

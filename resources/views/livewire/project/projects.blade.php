@@ -102,7 +102,7 @@
                             </div>
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-gray-900 font-semibold">Оплата: {{ $project['pay'] ? $project['pay'].' сом'  : 'Договорная' }}</span>
-                                <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Откликнуться</a>
+                                @livewire('components.redirect-component', [$project])
                             </div>
 
                             <div class="flex flex-wrap gap-2 mb-2">
